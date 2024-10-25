@@ -1,0 +1,15 @@
+# Local development environment overrides
+/local.nix
+
+#Task
+/.task/
+/Taskfile.yaml
+/Taskfile.yml
+
+# Misc
+.DS_Store
+.todo
+
+# Data
+/data/*
+!/data/.gitkeep

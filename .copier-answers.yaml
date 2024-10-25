@@ -1,0 +1,17 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 0.5.0
+_src_path: gh:radio-aktywne/template-database-cockroach
+accountname: radio-aktywne
+databasename: diamond
+description: OIDC auth data 🪪
+docs: true
+docsurl: https://radio-aktywne.github.io/diamond
+envprefix: DIAMOND
+httpport: 20011
+imagename: databases/diamond
+registry: true
+releases: true
+reponame: diamond
+repourl: https://github.com/radio-aktywne/diamond
+rpcport: 20012
+sqlport: 20010

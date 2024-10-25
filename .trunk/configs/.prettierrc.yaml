@@ -1,0 +1,10 @@
+plugins:
+  # Enable SQL plugin
+  - prettier-plugin-sql
+
+# Use PostgreSQL dialect
+language: postgresql
+database: postgresql
+
+# Enforce uppercase keywords
+keywordCase: upper

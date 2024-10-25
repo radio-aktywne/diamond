@@ -1,0 +1,18 @@
+services:
+  diamond:
+    build:
+      context: ./
+      network: host
+    environment:
+      - "DIAMOND__SERVER__HOST=${DIAMOND__SERVER__HOST:-0.0.0.0}"
+      - "DIAMOND__SERVER__PORTS__SQL=${DIAMOND__SERVER__PORTS__SQL:-20010}"
+      - "DIAMOND__SERVER__PORTS__HTTP=${DIAMOND__SERVER__PORTS__HTTP:-20011}"
+      - "DIAMOND__SERVER__PORTS__RPC=${DIAMOND__SERVER__PORTS__RPC:-20012}"
+      - "DIAMOND__CREDENTIALS__ROOT__PASSWORD=${DIAMOND__CREDENTIALS__ROOT__PASSWORD:-password}"
+      - "DIAMOND__CREDENTIALS__USER__PASSWORD=${DIAMOND__CREDENTIALS__USER__PASSWORD:-password}"
+    network_mode: host
+    volumes:
+      - data:/database/data/
+
+volumes:
+  data: {}

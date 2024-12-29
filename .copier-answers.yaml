@@ -3,7 +3,7 @@ _commit: 0.5.0
 _src_path: gh:radio-aktywne/template-database-cockroach
 accountname: radio-aktywne
 databasename: diamond
-description: OIDC auth data 🪪
+description: Users OIDC auth data 🪪
 docs: true
 docsurl: https://radio-aktywne.github.io/diamond
 envprefix: DIAMOND

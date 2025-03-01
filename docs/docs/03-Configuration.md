@@ -1,5 +1,5 @@
 ---
-slug: /configuration
+slug: /config
 title: Configuration
 ---
 

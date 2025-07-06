@@ -41,8 +41,10 @@
         coreutils = pkgs.coreutils;
         trunk = pkgs.trunk-io;
         copier = pkgs.copier;
-        cockroachdb = pkgs.cockroachdb-bin;
-        envsubst = pkgs.envsubst;
+        postgres = pkgs.postgresql_17;
+        postgres17 = pkgs.postgresql_17;
+        gomplate = pkgs.gomplate;
+        yq = pkgs.yq-go;
         tini = pkgs.tini;
         su-exec = pkgs.su-exec;
         usql = pkgs.usql;
@@ -75,10 +77,13 @@
               coreutils
               trunk
               copier
-              cockroachdb
-              envsubst
+              postgres
+              gomplate
+              yq
               usql
             ];
+
+            POSTGRES17 = postgres17;
 
             shellHook = ''
               export TMPDIR=/tmp
@@ -89,11 +94,15 @@
             name = "runtime";
 
             packages = [
-              cockroachdb
-              envsubst
+              coreutils
+              postgres
+              gomplate
+              yq
               tini
               su-exec
             ];
+
+            POSTGRES17 = postgres17;
 
             shellHook = ''
               export TMPDIR=/tmp

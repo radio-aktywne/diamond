@@ -9,5 +9,5 @@ Users OIDC auth data 🪪
 
 ## 💡 About
 
-`diamond` is a [`CockroachDB`](https://github.com/cockroachdb/cockroach) database
+`diamond` is a [`PostgreSQL`](https://www.postgresql.org) database
 that stores data for OIDC auth service.

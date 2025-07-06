@@ -33,7 +33,15 @@ init() {
 		--locale=C \
 		--username=postgres \
 		--auth-local=trust \
-		--auth-host=password
+		--auth-host=password \
+		--no-instructions ||
+		return
+
+	{
+		echo '# Allow connections from any host'
+		echo 'host    all             all             0.0.0.0/0               password'
+		echo 'host    all             all             ::/0                    password'
+	} >>"${1}/pg_hba.conf"
 }
 
 # Main database initialization function

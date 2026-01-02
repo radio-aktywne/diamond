@@ -4,9 +4,9 @@ services:
       context: ./
       network: host
     environment:
+      - "DIAMOND__CREDENTIALS__USER__PASSWORD=${DIAMOND__CREDENTIALS__USER__PASSWORD:-password}"
       - "DIAMOND__SERVER__HOST=${DIAMOND__SERVER__HOST:-0.0.0.0}"
       - "DIAMOND__SERVER__PORT=${DIAMOND__SERVER__PORT:-20010}"
-      - "DIAMOND__CREDENTIALS__USER__PASSWORD=${DIAMOND__CREDENTIALS__USER__PASSWORD:-password}"
     network_mode: host
     volumes:
       - data:/database/data/

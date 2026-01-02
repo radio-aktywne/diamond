@@ -2,7 +2,7 @@
 
 <div align="center">
 
-Users OIDC auth data 🪪
+Users OIDC auth database 🪪
 
 [![Lint](https://github.com/radio-aktywne/diamond/actions/workflows/lint.yaml/badge.svg)](https://github.com/radio-aktywne/diamond/actions/workflows/lint.yaml)
 [![Image](https://github.com/radio-aktywne/diamond/actions/workflows/image.yaml/badge.svg)](https://github.com/radio-aktywne/diamond/actions/workflows/image.yaml)

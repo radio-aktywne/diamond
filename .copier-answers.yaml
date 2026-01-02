@@ -1,9 +1,9 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: 0.1.0
+_commit: 0.2.0
 _src_path: gh:radio-aktywne/template-database-postgres
 accountname: radio-aktywne
 databasename: diamond
-description: Users OIDC auth data 🪪
+description: Users OIDC auth database 🪪
 docs: true
 docsurl: https://radio-aktywne.github.io/diamond
 envprefix: DIAMOND

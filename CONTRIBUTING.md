@@ -109,7 +109,7 @@ so you can format with it by using any editor formatting features.
 
 ## ▶️ Running
 
-To run the database, you can use the following command:
+You can use the following command to run the database:
 
 ```sh
 task run

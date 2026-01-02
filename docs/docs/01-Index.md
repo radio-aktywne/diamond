@@ -5,7 +5,7 @@ title: Index
 
 # diamond
 
-Users OIDC auth data 🪪
+Users OIDC auth database 🪪
 
 ## 💡 About
 

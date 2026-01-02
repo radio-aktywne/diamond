@@ -1,19 +1,19 @@
 version: 0.1
 cli:
-  version: 1.22.8
+  version: 1.25.0
 plugins:
   sources:
     - id: trunk
-      ref: v1.6.7
+      ref: v1.7.4
       uri: https://github.com/trunk-io/plugins
 runtimes:
   enabled:
     # Needed for gitleaks, shfmt
-    - go@1.23.6
-    # Needed for eslint, markdownlint, prettier, svgo
-    - node@22.14.0
+    - go@1.25.0
+    # Needed for eslint, markdownlint, prettier, stylelint, svgo
+    - node@22.20.0
     # Needed for yamllint
-    - python@3.12.2
+    - python@3.13.3
 lint:
   ignore:
     - linters: [ALL]
@@ -21,22 +21,19 @@ lint:
         # Ignore copier answers file
         - "**/.copier-answers.yaml"
   definitions:
-    # Include SQL plugin for prettier
+    # Support handling SQL files by Prettier
     - name: prettier
       files:
+        - javascript
         - typescript
-        - yaml
         - css
+        - postcss
         - sass
         - html
-        - markdown
         - json
-        - javascript
-        - graphql
-        - prettier_supported_configs
+        - yaml
+        - markdown
         - sql
-      extra_packages:
-        - "prettier-plugin-sql@0.18.1"
     # Nix formatting check (local)
     - name: nix-fmt-check
       files: [nix]
@@ -72,35 +69,50 @@ lint:
             path:${target}
           success_codes: [0, 1]
     # Override default eslint definition
-    # Remove after upgrading to eslint 10
     - name: eslint
       commands:
         - name: lint
-          run_from: ${parent}
+          run_from: ${root_or_parent_with_direct_config}
+    # Override default stylelint definition
+    - name: stylelint
+      commands:
+        - name: lint
+          run_from: ${root_or_parent_with_direct_config}
+        - name: fix
+          run_from: ${root_or_parent_with_direct_config}
   enabled:
     # GitHub Actions linting
-    - actionlint@1.7.7
-    # JavaScript linting
-    - eslint@9.20.1
+    - actionlint@1.7.8
+    # JavaScript and TypeScript linting
+    - eslint@9.39.1
     # Check for whitespace errors
     - git-diff-check
     # Check for secrets in the code
-    - gitleaks@8.23.3
+    - gitleaks@8.29.0
     # Dockerfile linting
-    - hadolint@2.12.0
+    - hadolint@2.14.0
     # Markdown linting
-    - markdownlint@0.44.0
+    - markdownlint@0.45.0
     # Nix formatting check
     - nix-fmt-check@SYSTEM
     # Nix flake check
     - nix-flake-check@SYSTEM
-    # JS, JSON, YAML, Markdown formatting
-    - prettier@3.5.1
+    # JS, TS, CSS, HTML, JSON, YAML, Markdown, SQL formatting
+    - prettier@3.6.2:
+        packages:
+          # SQL formatting
+          - prettier-plugin-sql@0.19.2
+          # JSON sorting
+          - prettier-plugin-sort-json@4.1.1
+          # package.json sorting
+          - prettier-plugin-packagejson@2.5.19
     # Shell linting
-    - shellcheck@0.10.0
+    - shellcheck@0.11.0
     # Shell formatting
-    - shfmt@3.10.0
+    - shfmt@3.12.0
+    # CSS linting
+    - stylelint@16.25.0
     # SVG formatting
-    - svgo@3.3.2
+    - svgo@4.0.0
     # YAML linting
-    - yamllint@1.35.1
+    - yamllint@1.37.1

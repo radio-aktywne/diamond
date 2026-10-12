@@ -1,29 +1,39 @@
 {
   inputs = {
-    nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-25.05";
-    };
-
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
+    };
+
+    multiverse = {
+      url = "github:fzakaria/nixpkgs-multiverse";
+    };
+
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-26.05";
     };
   };
 
   outputs = inputs:
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
-      # Import local override if it exists
-      imports = [
-        (
-          if builtins.pathExists ./local.nix
-          then ./local.nix
-          else {}
-        )
-      ];
+      flake = {
+        overlays = {
+          default = final: prev: {
+            # Add multiverse as an attribute
+            multiverse = inputs.multiverse.lib.mkMultiverse {
+              config = {
+                # Allow packages with non-free licenses
+                allowUnfree = true;
+              };
+
+              system = final.stdenv.hostPlatform.system;
+            };
+          };
+        };
+      };
 
       # Sensible defaults
       systems = [
         "x86_64-linux"
-        "i686-linux"
         "aarch64-linux"
         "x86_64-darwin"
         "aarch64-darwin"
@@ -36,14 +46,16 @@
         ...
       }: let
         nix = pkgs.nix;
-        node = pkgs.nodejs;
+        node = pkgs.nodejs_26;
+        nh = pkgs.nh;
         nil = pkgs.nil;
         task = pkgs.go-task;
         coreutils = pkgs.coreutils;
         trunk = pkgs.trunk-io;
-        copier = pkgs.python313.withPackages (ps: [ps.copier]);
-        postgres = pkgs.postgresql_17;
+        copier = pkgs.python314.withPackages (ps: [ps.copier]);
+        postgres = pkgs.postgresql_18;
         postgres17 = pkgs.postgresql_17;
+        postgres18 = pkgs.postgresql_18;
         gomplate = pkgs.gomplate;
         yq = pkgs.yq-go;
         tini = pkgs.tini;
@@ -53,14 +65,16 @@
         # Override pkgs argument
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
+
           config = {
             # Allow packages with non-free licenses
             allowUnfree = true;
-            # Allow packages with broken dependencies
-            allowBroken = true;
-            # Allow packages with unsupported system
-            allowUnsupportedSystem = true;
           };
+
+          overlays = [
+            # Use default overlay
+            inputs.self.overlays.default
+          ];
         };
 
         # Set which formatter should be used
@@ -74,6 +88,7 @@
             packages = [
               nix
               node
+              nh
               nil
               task
               coreutils
@@ -86,6 +101,7 @@
             ];
 
             POSTGRES17 = postgres17;
+            POSTGRES18 = postgres18;
 
             shellHook = ''
               export TMPDIR=/tmp
@@ -105,6 +121,7 @@
             ];
 
             POSTGRES17 = postgres17;
+            POSTGRES18 = postgres18;
 
             shellHook = ''
               export TMPDIR=/tmp

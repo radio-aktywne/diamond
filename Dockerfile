@@ -50,5 +50,9 @@ COPY scripts/entrypoint.sh scripts/entrypoint.sh
 ENTRYPOINT ["/database/scripts/entrypoint.sh", "./src/start.sh"]
 CMD []
 
+# Use SIGINT as the signal to stop the container
+# This ensures PostgreSQL uses fast shutdown mode
+STOPSIGNAL SIGINT
+
 # Setup ownership
 RUN chown --recursive database: ./

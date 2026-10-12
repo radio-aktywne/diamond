@@ -28,20 +28,38 @@ isinitialized() {
 
 # Reusable generic database initialization function
 init() {
-	initdb --pgdata="${1}" \
-		--encoding=UTF8 \
-		--locale=C \
-		--username=postgres \
-		--auth-local=trust \
-		--auth-host=password \
-		--no-instructions ||
-		return
+	options='--auth-host=password --auth-local=trust --encoding=UTF8 --locale=C --no-instructions --username=postgres'
+	unparsed=''
+
+	while [ -n "${1:-}" ]; do
+		case "${1}" in
+		--checksums)
+			options="${options} --data-checksums"
+			;;
+		--no-checksums)
+			options="${options} --no-data-checksums"
+			;;
+		*)
+			unparsed="${unparsed} ${1}"
+			;;
+		esac
+		shift
+	done
+
+	# shellcheck disable=SC2086
+	set -- ${unparsed}
+
+	initdatadir="${1}"
+	options="--pgdata=${initdatadir} ${options}"
+
+	# shellcheck disable=SC2086
+	initdb ${options} || return
 
 	{
 		echo '# Allow connections from any host'
 		echo 'host    all             all             0.0.0.0/0               password'
 		echo 'host    all             all             ::/0                    password'
-	} >>"${1}/pg_hba.conf"
+	} >>"${initdatadir}/pg_hba.conf"
 }
 
 # Main database initialization function
@@ -66,6 +84,24 @@ getbinmajor() {
 # Function to get PostgreSQL directory for a specific major version
 getpgdir() {
 	eval echo "\${POSTGRES${1}}"
+}
+
+# Function to initialize a data directory for an upgrade
+initializeupgrade() {
+	oldbindir="${1}"
+	olddatadir="${2}"
+	newdatadir="${3}"
+
+	options=''
+
+	if "${oldbindir}/pg_controldata" "${olddatadir}" | grep --quiet 'Data page checksum version: *0'; then
+		options="${options} --no-checksums"
+	else
+		options="${options} --checksums"
+	fi
+
+	# shellcheck disable=SC2086
+	init "${newdatadir}" ${options}
 }
 
 # Upgrade function
@@ -93,7 +129,7 @@ upgrade() {
 	rm --recursive --force "${newdatadir}"
 	mkdir --parents "${newdatadir}"
 
-	if ! init "${newdatadir}"; then
+	if ! initializeupgrade "${oldbindir}" "${1}" "${newdatadir}"; then
 		echo 'Failed to initialize new data directory!'
 		exit 1
 	fi

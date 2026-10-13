@@ -7,3 +7,9 @@ WITH
 ALTER USER "user"
 WITH
   CREATEDB;
+
+-- Connect to the main database
+\connect "database"
+
+-- Enable UUID generation
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

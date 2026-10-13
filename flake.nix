@@ -54,7 +54,6 @@
         trunk = pkgs.trunk-io;
         copier = pkgs.python314.withPackages (ps: [ps.copier]);
         postgres = pkgs.postgresql_18;
-        postgres17 = pkgs.postgresql_17;
         postgres18 = pkgs.postgresql_18;
         gomplate = pkgs.gomplate;
         yq = pkgs.yq-go;
@@ -100,7 +99,6 @@
               usql
             ];
 
-            POSTGRES17 = postgres17;
             POSTGRES18 = postgres18;
 
             shellHook = ''
@@ -120,7 +118,6 @@
               su-exec
             ];
 
-            POSTGRES17 = postgres17;
             POSTGRES18 = postgres18;
 
             shellHook = ''
